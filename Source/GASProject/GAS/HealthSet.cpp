@@ -1,5 +1,36 @@
-// Fill out your copyright notice in the Description page of Project Settings.
+#include "HealthSet.h"
+#include "GameplayEffectExtension.h"
 
+UHealthSet::UHealthSet() : Health(100.0f), MaxHealth(100.0f)
+{
+	bIsOutOfHealth = false;
+	MinHealth = 0.0f;
+}
 
-#include "GAS/HealthSet.h"
-
+void UHealthSet::PostGameplayEffectExecute(const FGameplayEffectModCallbackData& Data)
+{
+	Super::PostGameplayEffectExecute(Data);
+	
+	if (Data.EvaluatedData.Attribute == GetIncomingDamageAttribute())
+	{
+		float NewHealth = FMath::Clamp(GetHealth() - GetIncomingDamage(), MinHealth, GetMaxHealth());
+		SetHealth(NewHealth);
+		SetIncomingDamage(0.0f);
+		
+		OnHealthChanged.Broadcast(NewHealth);
+		
+		if (NewHealth <= MinHealth)
+		{
+			OnOutOfHealth.Broadcast();
+			bIsOutOfHealth = true;
+		}
+	}
+	else if (Data.EvaluatedData.Attribute == GetHealingAttribute())
+	{
+		float NewHealth = FMath::Clamp(GetHealth() + GetHealing(), MinHealth, GetMaxHealth());
+		SetHealth(NewHealth);
+		SetHealing(0.0f);
+		
+		OnHealthChanged.Broadcast(NewHealth);
+	}
+}
