@@ -11,7 +11,7 @@ void UHealthSet::PostGameplayEffectExecute(const FGameplayEffectModCallbackData&
 {
 	Super::PostGameplayEffectExecute(Data);
 	
-	if (Data.EvaluatedData.Attribute == GetIncomingDamageAttribute())
+	if (Data.EvaluatedData.Attribute == GetIncomingDamageAttribute() && !bIsOutOfHealth)
 	{
 		float NewHealth = FMath::Clamp(GetHealth() - GetIncomingDamage(), MinHealth, GetMaxHealth());
 		SetHealth(NewHealth);
