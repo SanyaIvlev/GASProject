@@ -17,20 +17,16 @@ void UHealthSet::PostGameplayEffectExecute(const FGameplayEffectModCallbackData&
 		SetHealth(NewHealth);
 		SetIncomingDamage(0.0f);
 		
-		OnHealthChanged.Broadcast(NewHealth);
-		
 		if (NewHealth <= MinHealth)
 		{
 			OnOutOfHealth.Broadcast();
 			bIsOutOfHealth = true;
 		}
 	}
-	else if (Data.EvaluatedData.Attribute == GetHealingAttribute())
+	else if (Data.EvaluatedData.Attribute == GetHealingAttribute() && !bIsOutOfHealth)
 	{
 		float NewHealth = FMath::Clamp(GetHealth() + GetHealing(), MinHealth, GetMaxHealth());
 		SetHealth(NewHealth);
 		SetHealing(0.0f);
-		
-		OnHealthChanged.Broadcast(NewHealth);
 	}
 }

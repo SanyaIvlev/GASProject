@@ -13,8 +13,6 @@
 	GAMEPLAYATTRIBUTE_VALUE_SETTER(PropertyName) \
 	GAMEPLAYATTRIBUTE_VALUE_INITTER(PropertyName)
 
-DECLARE_DYNAMIC_MULTICAST_DELEGATE_OneParam(FOnSpeedChangedDelegate, float, NewSpeed);
-
 UCLASS()
 class GASPROJECT_API UMovementSet : public UAttributeSet
 {
@@ -22,9 +20,6 @@ class GASPROJECT_API UMovementSet : public UAttributeSet
 	
 public:
 	ATTRIBUTE_ACCESSORS(UMovementSet, Speed);
-	
-	UPROPERTY(BlueprintAssignable)
-	FOnSpeedChangedDelegate OnSpeedChanged;
 
 	UMovementSet();
 

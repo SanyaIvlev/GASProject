@@ -11,7 +11,6 @@
 	GAMEPLAYATTRIBUTE_VALUE_SETTER(PropertyName) \
 	GAMEPLAYATTRIBUTE_VALUE_INITTER(PropertyName)
 
-DECLARE_DYNAMIC_MULTICAST_DELEGATE_OneParam(FOnHealthChangedDelegate, float, Health);
 DECLARE_DYNAMIC_MULTICAST_DELEGATE(FOnOutOfHealthDelegate);
 
 UCLASS()
@@ -26,9 +25,6 @@ public:
 	ATTRIBUTE_ACCESSORS(UHealthSet, MaxHealth);
 	ATTRIBUTE_ACCESSORS(UHealthSet, IncomingDamage);
 	ATTRIBUTE_ACCESSORS(UHealthSet, Healing);
-	
-	UPROPERTY(BlueprintAssignable)
-	FOnHealthChangedDelegate OnHealthChanged;
 	
 	UPROPERTY(BlueprintAssignable)
 	FOnOutOfHealthDelegate OnOutOfHealth;
