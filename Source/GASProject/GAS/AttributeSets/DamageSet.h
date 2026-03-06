@@ -25,4 +25,7 @@ public:
 protected:
 	UPROPERTY(BlueprintReadOnly)
 	FGameplayAttributeData BaseDamage;
+	
+	UFUNCTION(BlueprintCallable)
+	void InitializeBaseDamage(float NewValue);
 };
