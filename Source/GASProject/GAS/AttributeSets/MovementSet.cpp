@@ -15,4 +15,5 @@ void UMovementSet::PostGameplayEffectExecute(const FGameplayEffectModCallbackDat
 	}
 	
 	OnSpeedChanged.Broadcast(GetSpeed());
+	
 }

@@ -1,9 +1,9 @@
 ﻿#pragma once
 
 #include "CoreMinimal.h"
+#include "GameplayTagContainer.h"
 #include "Engine/DataAsset.h"
 #include "PickUpInfo.generated.h"
-
 
 class UGameplayEffect;
 
@@ -14,7 +14,7 @@ class GASPROJECT_API UPickUpInfo : public UPrimaryDataAsset
 	
 public:
 	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly)
-	UGameplayEffect* PickUpEffect;
+	TSubclassOf<UGameplayEffect> PickUpEffect;
 	
 	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly)
 	FText PickUpText;
@@ -24,4 +24,14 @@ public:
 	
 	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, meta = (EditCondition = "bHasDuration"))
 	float Duration;
+	
+	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly)
+	bool bDoesUseEffectSpec;
+	
+	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, meta = (EditCondition = "bDoesUseEffectSpec"))
+	FGameplayTag SpecDataTag;
+	
+	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, meta = (EditCondition = "bDoesUseEffectSpec"))
+	float SpecMagnitude;
+	
 };
