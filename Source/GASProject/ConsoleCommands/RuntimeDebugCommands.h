@@ -25,6 +25,8 @@ public:
 	
 	void HealCharacter(const TArray<FString>& Args, UWorld* World);
 	void DamageCharacter(const TArray<FString>& Args, UWorld* World);
+
+	virtual bool ShouldCreateSubsystem(UObject* Outer) const override;
 	
 private:
 	UPROPERTY()

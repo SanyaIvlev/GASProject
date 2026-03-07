@@ -89,3 +89,12 @@ void URuntimeDebugCommands::DamageCharacter(const TArray<FString>& Args, UWorld*
 	
 	AbilitySystemComponent->ApplyGameplayEffectSpecToSelf(*SpecHandle.Data.Get());
 }
+
+bool URuntimeDebugCommands::ShouldCreateSubsystem(UObject* Outer) const
+{
+#if UE_BUILD_SHIPPING
+	return false; 
+#else
+	return true;
+#endif
+}
