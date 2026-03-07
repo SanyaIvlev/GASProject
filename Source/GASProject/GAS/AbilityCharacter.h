@@ -27,6 +27,7 @@ public:
 	UFUNCTION(BlueprintCallable)
 	void InitializeAttributeSetsFromData(UCharacterAttributesData* AttributeSetData);
 	
+	virtual void EndPlay(const EEndPlayReason::Type EndPlayReason) override;
 protected:
 	UPROPERTY(EditAnywhere, BlueprintReadWrite)
 	UAbilitySystemComponent* AbilitySystemComponent;

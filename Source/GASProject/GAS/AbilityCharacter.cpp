@@ -36,6 +36,13 @@ void AAbilityCharacter::InitializeAttributeSetsFromData(UCharacterAttributesData
 	}
 }
 
+void AAbilityCharacter::EndPlay(const EEndPlayReason::Type EndPlayReason)
+{
+	Super::EndPlay(EndPlayReason);
+	
+	AbilitySystemComponent->RegisterGenericGameplayTagEvent().RemoveAll(this);
+}
+
 void AAbilityCharacter::OnGameplayTagUpdated(const FGameplayTag Tag, int32 TagCount) const
 {
 	OnAnyTagChanged.Broadcast(Tag, TagCount > 0);
