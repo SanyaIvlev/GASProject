@@ -3,6 +3,15 @@
 #include "AttributeSet.h"
 #include "CharacterAttributesData.h"
 
+void AAbilityCharacter::BeginPlay()
+{
+	Super::BeginPlay();
+	
+	check(AbilitySystemComponent);
+	
+	AbilitySystemComponent->RegisterGenericGameplayTagEvent().AddUObject(this, &AAbilityCharacter::OnGameplayTagUpdated);
+}
+
 UAbilitySystemComponent* AAbilityCharacter::GetAbilitySystemComponent() const
 {
 	return AbilitySystemComponent;
@@ -25,5 +34,10 @@ void AAbilityCharacter::InitializeAttributeSetsFromData(UCharacterAttributesData
         
 		AbilitySystemComponent->AddAttributeSetSubobject(NewAttributeSet);
 	}
+}
+
+void AAbilityCharacter::OnGameplayTagUpdated(const FGameplayTag Tag, int32 TagCount) const
+{
+	OnAnyTagChanged.Broadcast(Tag, TagCount > 0);
 }
 
