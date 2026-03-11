@@ -2,7 +2,6 @@
 
 
 #include "AbilitySet.h"
-
 #include "AbilitySystemComponent.h"
 #include "Abilities/GameplayAbility.h"
 
@@ -23,5 +22,7 @@ void UAbilitySet::GiveAbilities(UAbilitySystemComponent* AbilitySystemComponent,
 		AbilitySpec.GetDynamicSpecSourceTags().AddTag(AbilityInfo.InputTag);
 		
 		AbilitySystemComponent->GiveAbility(AbilitySpec);
+		
+		// TODO bind input tag to input action
 	}
 }

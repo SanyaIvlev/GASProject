@@ -1,4 +1,6 @@
 ﻿#include "AbilityCharacter.h"
+
+#include "AbilitySet.h"
 #include "AbilitySystemComponent.h"
 #include "AttributeSet.h"
 #include "CharacterAttributesData.h"
@@ -10,6 +12,11 @@ void AAbilityCharacter::BeginPlay()
 	check(AbilitySystemComponent);
 	
 	AbilitySystemComponent->RegisterGenericGameplayTagEvent().AddUObject(this, &AAbilityCharacter::OnGameplayTagUpdated);
+	
+	if (StartingAbilitySet != nullptr)
+	{
+		StartingAbilitySet->GiveAbilities(AbilitySystemComponent, this);
+	}
 }
 
 UAbilitySystemComponent* AAbilityCharacter::GetAbilitySystemComponent() const

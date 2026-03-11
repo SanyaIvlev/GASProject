@@ -6,6 +6,7 @@
 #include "GameFramework/Character.h"
 #include "AbilityCharacter.generated.h"
 
+class UAbilitySet;
 class UCharacterAttributesData;
 
 
@@ -17,6 +18,9 @@ class GASPROJECT_API AAbilityCharacter : public ACharacter, public IAbilitySyste
 	GENERATED_BODY()
 	
 public:
+	UPROPERTY(EditAnywhere, BlueprintReadWrite)
+	UAbilitySet* StartingAbilitySet;
+	
 	UPROPERTY(BlueprintAssignable)
 	FOnAnyTagChanged OnAnyTagChanged;
 	
