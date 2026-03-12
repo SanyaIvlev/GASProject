@@ -8,6 +8,7 @@
 #include "AbilitySet.generated.h"
 
 
+class AAbilityCharacter;
 class UAbilitySystemComponent;
 
 UCLASS()
@@ -16,8 +17,8 @@ class GASPROJECT_API UAbilitySet : public UPrimaryDataAsset
 	GENERATED_BODY()
 	
 public:
-	
+	UPROPERTY(EditDefaultsOnly)
 	TArray<FAbilityInfo> Abilities;
 	
-	void GiveAbilities(UAbilitySystemComponent* AbilitySystemComponent, UObject* SourceObject) const;
+	void GiveAbilities(AAbilityCharacter* AbilityCharacter) const;
 };

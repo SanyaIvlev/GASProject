@@ -15,7 +15,7 @@ void AAbilityCharacter::BeginPlay()
 	
 	if (StartingAbilitySet != nullptr)
 	{
-		StartingAbilitySet->GiveAbilities(AbilitySystemComponent, this);
+		StartingAbilitySet->GiveAbilities(this);
 	}
 }
 

@@ -1,13 +1,18 @@
-﻿// Fill out your copyright notice in the Description page of Project Settings.
-
-
-#include "AbilitySet.h"
+﻿#include "AbilitySet.h"
+#include "AbilityCharacter.h"
 #include "AbilitySystemComponent.h"
+#include "EnhancedInputComponent.h"
+#include "EnhancedInputSubsystems.h"
+#include "InputTagSubsystem.h"
+#include "InputActionValue.h"
 #include "Abilities/GameplayAbility.h"
+#include "Kismet/GameplayStatics.h"
 
-void UAbilitySet::GiveAbilities(UAbilitySystemComponent* AbilitySystemComponent, UObject* SourceObject) const
+void UAbilitySet::GiveAbilities(AAbilityCharacter* AbilityCharacter) const
 {
-	if (AbilitySystemComponent == nullptr)
+	UAbilitySystemComponent* ASC = AbilityCharacter->GetAbilitySystemComponent();
+	
+	if (ASC == nullptr)
 	{
 		return;
 	}
@@ -17,12 +22,32 @@ void UAbilitySet::GiveAbilities(UAbilitySystemComponent* AbilitySystemComponent,
 		UGameplayAbility* AbilityToGrant = AbilityInfo.Ability->GetDefaultObject<UGameplayAbility>();
 		
 		FGameplayAbilitySpec AbilitySpec(AbilityToGrant);
-		AbilitySpec.SourceObject = SourceObject;
+		AbilitySpec.SourceObject = AbilityCharacter;
+		FGameplayTag Tag = AbilityInfo.InputTag;
 		
-		AbilitySpec.GetDynamicSpecSourceTags().AddTag(AbilityInfo.InputTag);
+		AbilitySpec.GetDynamicSpecSourceTags().AddTag(Tag);
 		
-		AbilitySystemComponent->GiveAbility(AbilitySpec);
+		UInputComponent* InputComponent = AbilityCharacter->InputComponent;
+		UEnhancedInputComponent* EIC = CastChecked<UEnhancedInputComponent>(InputComponent);
 		
-		// TODO bind input tag to input action
+		UWorld* WorldContext = AbilityCharacter->GetWorld();
+		UInputTagSubsystem* InputTagSubsystem = UInputTagSubsystem::GetInputTagSubsystem(WorldContext);
+		UInputAction* AbilityInputAction = InputTagSubsystem->GetInputAction(Tag);
+		
+		APlayerController* PlayerController = UGameplayStatics::GetPlayerController(WorldContext, 0);
+		
+		EIC->BindActionValueLambda(AbilityInputAction, ETriggerEvent::Started, [ASC, Tag](const FInputActionValue& Value)
+		{
+			if (ASC)
+			{
+				FGameplayEventData EventData;
+				EventData.EventTag = Tag;
+				EventData.Instigator = ASC->GetAvatarActor();
+		        
+				ASC->HandleGameplayEvent(Tag, &EventData);
+			}
+		});
+		
+		ASC->GiveAbility(AbilitySpec);
 	}
 }
