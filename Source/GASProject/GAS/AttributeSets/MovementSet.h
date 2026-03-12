@@ -7,25 +7,20 @@
 #include "AbilitySystemComponent.h"
 #include "MovementSet.generated.h"
 
-#define ATTRIBUTE_ACCESSORS(ClassName, PropertyName) \
-	GAMEPLAYATTRIBUTE_PROPERTY_GETTER(ClassName, PropertyName) \
-	GAMEPLAYATTRIBUTE_VALUE_GETTER(PropertyName) \
-	GAMEPLAYATTRIBUTE_VALUE_SETTER(PropertyName) \
-	GAMEPLAYATTRIBUTE_VALUE_INITTER(PropertyName)
-
 UCLASS()
 class GASPROJECT_API UMovementSet : public UAttributeSet
 {
 	GENERATED_BODY()
 	
 public:
-	ATTRIBUTE_ACCESSORS(UMovementSet, Speed);
+	ATTRIBUTE_ACCESSORS_BASIC(UMovementSet, Speed);
 
+	UPROPERTY(EditAnywhere, BlueprintReadOnly)
+	FGameplayAttributeData Speed;
+	
 	UMovementSet();
 
 protected:
-	UPROPERTY(EditAnywhere, BlueprintReadOnly)
-	FGameplayAttributeData Speed;
 	
 	float MinSpeed;
 	

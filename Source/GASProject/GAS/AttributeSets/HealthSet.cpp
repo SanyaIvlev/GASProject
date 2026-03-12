@@ -7,17 +7,34 @@ UHealthSet::UHealthSet() : Health(100.0f), MaxHealth(100.0f)
 	MinHealth = 0.0f;
 }
 
+void UHealthSet::PreAttributeChange(const FGameplayAttribute& Attribute, float& NewValue)
+{
+	Super::PreAttributeChange(Attribute, NewValue);
+		
+	// if (Attribute == GetHealthAttribute())
+	// {
+	// 	float NewHealth = FMath::Clamp(NewValue, MinHealth, GetMaxHealth());
+	// 	SetHealth(NewHealth);
+	// 	
+	// 	if (NewHealth <= MinHealth && !bIsOutOfHealth)
+	// 	{
+	// 		OnOutOfHealth.Broadcast();
+	// 		bIsOutOfHealth = true;
+	// 	}
+	// }
+}
+
 void UHealthSet::PostGameplayEffectExecute(const FGameplayEffectModCallbackData& Data)
 {
 	Super::PostGameplayEffectExecute(Data);
 	
-	if (Data.EvaluatedData.Attribute == GetIncomingDamageAttribute() && !bIsOutOfHealth)
-	{
-		float NewHealth = FMath::Clamp(GetHealth() - GetIncomingDamage(), MinHealth, GetMaxHealth());
-		SetHealth(NewHealth);
-		SetIncomingDamage(0.0f);
 		
-		if (NewHealth <= MinHealth)
+	if (Data.EvaluatedData.Attribute == GetHealthAttribute())
+	{
+		float NewHealth = FMath::Clamp(GetHealth(), MinHealth, GetMaxHealth());
+		SetHealth(NewHealth);
+		
+		if (NewHealth <= MinHealth && !bIsOutOfHealth)
 		{
 			OnOutOfHealth.Broadcast();
 			bIsOutOfHealth = true;

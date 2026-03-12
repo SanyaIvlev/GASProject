@@ -34,8 +34,6 @@ void UAbilitySet::GiveAbilities(AAbilityCharacter* AbilityCharacter) const
 		UInputTagSubsystem* InputTagSubsystem = UInputTagSubsystem::GetInputTagSubsystem(WorldContext);
 		UInputAction* AbilityInputAction = InputTagSubsystem->GetInputAction(Tag);
 		
-		APlayerController* PlayerController = UGameplayStatics::GetPlayerController(WorldContext, 0);
-		
 		EIC->BindActionValueLambda(AbilityInputAction, ETriggerEvent::Started, [ASC, Tag](const FInputActionValue& Value)
 		{
 			if (ASC)

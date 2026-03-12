@@ -5,12 +5,6 @@
 #include "AbilitySystemComponent.h"
 #include "HealthSet.generated.h"
 
-#define ATTRIBUTE_ACCESSORS(ClassName, PropertyName) \
-	GAMEPLAYATTRIBUTE_PROPERTY_GETTER(ClassName, PropertyName) \
-	GAMEPLAYATTRIBUTE_VALUE_GETTER(PropertyName) \
-	GAMEPLAYATTRIBUTE_VALUE_SETTER(PropertyName) \
-	GAMEPLAYATTRIBUTE_VALUE_INITTER(PropertyName)
-
 DECLARE_DYNAMIC_MULTICAST_DELEGATE(FOnOutOfHealthDelegate);
 
 UCLASS()
@@ -21,15 +15,13 @@ class GASPROJECT_API UHealthSet : public UAttributeSet
 public:
 	UHealthSet();
 	
-	ATTRIBUTE_ACCESSORS(UHealthSet, Health);
-	ATTRIBUTE_ACCESSORS(UHealthSet, MaxHealth);
-	ATTRIBUTE_ACCESSORS(UHealthSet, IncomingDamage);
-	ATTRIBUTE_ACCESSORS(UHealthSet, Healing);
+	ATTRIBUTE_ACCESSORS_BASIC(UHealthSet, Health);
+	ATTRIBUTE_ACCESSORS_BASIC(UHealthSet, MaxHealth);
+	ATTRIBUTE_ACCESSORS_BASIC(UHealthSet, ArmorHealth);
+	ATTRIBUTE_ACCESSORS_BASIC(UHealthSet, ArmorAbsorption);
+	ATTRIBUTE_ACCESSORS_BASIC(UHealthSet, IncomingDamage);
+	ATTRIBUTE_ACCESSORS_BASIC(UHealthSet, Healing);
 	
-	UPROPERTY(BlueprintAssignable)
-	FOnOutOfHealthDelegate OnOutOfHealth;
-	
-protected:
 	UPROPERTY(BlueprintReadOnly)
 	FGameplayAttributeData Health;
 	
@@ -37,13 +29,24 @@ protected:
 	FGameplayAttributeData MaxHealth;
 	
 	UPROPERTY(BlueprintReadOnly)
+	FGameplayAttributeData ArmorHealth;
+	
+	UPROPERTY(BlueprintReadOnly)
+	FGameplayAttributeData ArmorAbsorption;
+	
+	UPROPERTY(BlueprintReadOnly)
 	FGameplayAttributeData Healing;
 	
 	UPROPERTY(BlueprintReadOnly)
 	FGameplayAttributeData IncomingDamage;
 	
+	UPROPERTY(BlueprintAssignable)
+	FOnOutOfHealthDelegate OnOutOfHealth;
+	
+protected:
 	bool bIsOutOfHealth;
 	float MinHealth;
 	
+	virtual void PreAttributeChange(const FGameplayAttribute& Attribute, float& NewValue) override;
 	virtual void PostGameplayEffectExecute(const FGameplayEffectModCallbackData& Data) override;
 };

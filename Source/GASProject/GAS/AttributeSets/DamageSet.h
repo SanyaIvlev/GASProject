@@ -5,13 +5,6 @@
 #include "AbilitySystemComponent.h"
 #include "DamageSet.generated.h"
 
-
-#define ATTRIBUTE_ACCESSORS(ClassName, PropertyName) \
-	GAMEPLAYATTRIBUTE_PROPERTY_GETTER(ClassName, PropertyName) \
-	GAMEPLAYATTRIBUTE_VALUE_GETTER(PropertyName) \
-	GAMEPLAYATTRIBUTE_VALUE_SETTER(PropertyName) \
-	GAMEPLAYATTRIBUTE_VALUE_INITTER(PropertyName)
-
 UCLASS()
 class GASPROJECT_API UDamageSet : public UAttributeSet
 {
@@ -20,12 +13,12 @@ class GASPROJECT_API UDamageSet : public UAttributeSet
 public:
 	UDamageSet();
 	
-	ATTRIBUTE_ACCESSORS(UDamageSet, BaseDamage);
+	ATTRIBUTE_ACCESSORS_BASIC(UDamageSet, BaseDamage);
 	
-protected:
 	UPROPERTY(BlueprintReadOnly)
 	FGameplayAttributeData BaseDamage;
 	
+protected:
 	UFUNCTION(BlueprintCallable)
 	void InitializeBaseDamage(float NewValue);
 };
