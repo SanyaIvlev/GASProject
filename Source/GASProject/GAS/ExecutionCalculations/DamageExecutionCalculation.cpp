@@ -1,8 +1,5 @@
-// Fill out your copyright notice in the Description page of Project Settings.
-
-
-#include "GASProject/GAS/AttributeSets/HealthSet.h"
 #include "DamageExecutionCalculation.h"
+#include "GASProject/GAS/AttributeSets/HealthSet.h"
 
 FDamageStatics::FDamageStatics()
 {

@@ -18,6 +18,7 @@ public:
 	ATTRIBUTE_ACCESSORS_BASIC(UHealthSet, Health);
 	ATTRIBUTE_ACCESSORS_BASIC(UHealthSet, MaxHealth);
 	ATTRIBUTE_ACCESSORS_BASIC(UHealthSet, ArmorHealth);
+	ATTRIBUTE_ACCESSORS_BASIC(UHealthSet, ArmorMaxHealth);
 	ATTRIBUTE_ACCESSORS_BASIC(UHealthSet, ArmorAbsorption);
 	ATTRIBUTE_ACCESSORS_BASIC(UHealthSet, IncomingDamage);
 	ATTRIBUTE_ACCESSORS_BASIC(UHealthSet, Healing);
@@ -30,6 +31,9 @@ public:
 	
 	UPROPERTY(BlueprintReadOnly)
 	FGameplayAttributeData ArmorHealth;
+	
+	UPROPERTY(BlueprintReadOnly)
+	FGameplayAttributeData ArmorMaxHealth;
 	
 	UPROPERTY(BlueprintReadOnly)
 	FGameplayAttributeData ArmorAbsorption;
