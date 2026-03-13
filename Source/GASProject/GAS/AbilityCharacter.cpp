@@ -29,6 +29,28 @@ UAbilitySystemComponent* AAbilityCharacter::GetAbilitySystemComponent() const
 	return AbilitySystemComponent;
 }
 
+float AAbilityCharacter::GetCooldownRemaining(FGameplayTag CooldownTag) const
+{
+	if (IsValid(AbilitySystemComponent))
+	{
+		FGameplayEffectQuery const Query = FGameplayEffectQuery::MakeQuery_MatchAnyOwningTags(FGameplayTagContainer(CooldownTag));
+        
+		TArray<float> TimesRemaining = AbilitySystemComponent->GetActiveEffectsTimeRemaining(Query);
+        
+		if (TimesRemaining.Num() > 0)
+		{
+			float MaxTime = TimesRemaining[0];
+			
+			for (float Time : TimesRemaining)
+			{
+				if (Time > MaxTime) MaxTime = Time;
+			}
+			return MaxTime;
+		}
+	}
+	return 0.f;
+}
+
 void AAbilityCharacter::InitializeAttributeSetsFromData(UCharacterAttributesData* AttributeSetData)
 {
 	check(AbilitySystemComponent);

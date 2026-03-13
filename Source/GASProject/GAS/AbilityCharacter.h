@@ -30,8 +30,10 @@ public:
 	
 	virtual void BeginPlay() override;
 	virtual void SetupPlayerInputComponent(UInputComponent* PlayerInputComponent) override;
-	
 	virtual UAbilitySystemComponent* GetAbilitySystemComponent() const override;
+	
+	UFUNCTION(BlueprintCallable)
+	float GetCooldownRemaining(FGameplayTag Tag) const;
 	
 	UFUNCTION(BlueprintCallable)
 	void InitializeAttributeSetsFromData(UCharacterAttributesData* AttributeSetData);
