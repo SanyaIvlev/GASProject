@@ -14,7 +14,6 @@ void UManaSet::PreAttributeChange(const FGameplayAttribute& Attribute, float& Ne
 	
 	if (Attribute == GetManaAttribute())
 	{
-		float NewMana = FMath::Clamp(NewValue, MinMana, GetMaxMana());
-		SetMana(NewMana);
+		NewValue = FMath::Clamp(NewValue, MinMana, GetMaxMana());
 	}
 }
