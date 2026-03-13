@@ -11,6 +11,7 @@ class UCharacterAttributesData;
 
 
 DECLARE_DYNAMIC_MULTICAST_DELEGATE_TwoParams(FOnAnyTagChanged, FGameplayTag, Tag, bool, bIsPresent);
+DECLARE_DYNAMIC_MULTICAST_DELEGATE_OneParam(FOnDeath, AAbilityCharacter*, Character);
 
 UCLASS()
 class GASPROJECT_API AAbilityCharacter : public ACharacter, public IAbilitySystemInterface
@@ -24,7 +25,11 @@ public:
 	UPROPERTY(BlueprintAssignable)
 	FOnAnyTagChanged OnAnyTagChanged;
 	
+	UPROPERTY(BlueprintAssignable, BlueprintCallable)
+	FOnDeath OnDeath;
+	
 	virtual void BeginPlay() override;
+	virtual void SetupPlayerInputComponent(UInputComponent* PlayerInputComponent) override;
 	
 	virtual UAbilitySystemComponent* GetAbilitySystemComponent() const override;
 	

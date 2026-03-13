@@ -3,13 +3,38 @@
 #pragma once
 
 #include "CoreMinimal.h"
-#include "AbilityInfo.h"
+#include "GameplayAbilitySpec.h"
 #include "Engine/DataAsset.h"
 #include "AbilitySet.generated.h"
 
 
 class AAbilityCharacter;
 class UAbilitySystemComponent;
+
+USTRUCT()
+struct FAbilityInfo
+{
+	GENERATED_BODY()
+	
+public:
+	UPROPERTY(EditDefaultsOnly)
+	TSubclassOf<UGameplayAbility> Ability;
+	
+	UPROPERTY(EditDefaultsOnly)
+	FGameplayTag InputTag;
+};
+
+USTRUCT()
+struct FCharacterGivenAbilitiesHandle
+{
+	GENERATED_BODY()
+	
+public:
+	TArray<FGameplayAbilitySpec> AbilitySpecs;
+	
+	TArray<int32> InputBindings;
+};
+
 
 UCLASS()
 class GASPROJECT_API UAbilitySet : public UPrimaryDataAsset
@@ -20,5 +45,16 @@ public:
 	UPROPERTY(EditDefaultsOnly)
 	TArray<FAbilityInfo> Abilities;
 	
-	void GiveAbilities(AAbilityCharacter* AbilityCharacter) const;
+	void GiveAbilities(AAbilityCharacter* AbilityCharacter);
+	void RemoveAbilities(AAbilityCharacter* AbilityCharacter);
+	
+private:
+	TMap<AActor*, FCharacterGivenAbilitiesHandle> GivenAbilities;
+	
+	UPROPERTY()
+	TArray<FGameplayAbilitySpec> AbilitySpecs;
+	
+	UFUNCTION()
+	void OnCharacterDestroyed(AAbilityCharacter* DestroyedCharacter);
+	void RemoveBindings(AAbilityCharacter* DestroyedCharacter);
 };

@@ -6,9 +6,8 @@
 #include "InputTagSubsystem.h"
 #include "InputActionValue.h"
 #include "Abilities/GameplayAbility.h"
-#include "Kismet/GameplayStatics.h"
 
-void UAbilitySet::GiveAbilities(AAbilityCharacter* AbilityCharacter) const
+void UAbilitySet::GiveAbilities(AAbilityCharacter* AbilityCharacter)
 {
 	UAbilitySystemComponent* ASC = AbilityCharacter->GetAbilitySystemComponent();
 	
@@ -16,6 +15,8 @@ void UAbilitySet::GiveAbilities(AAbilityCharacter* AbilityCharacter) const
 	{
 		return;
 	}
+	
+	FCharacterGivenAbilitiesHandle& CharacterAbilitiesHandle = GivenAbilities.Add(AbilityCharacter);
 	
 	for (auto& AbilityInfo : Abilities)
 	{
@@ -34,7 +35,7 @@ void UAbilitySet::GiveAbilities(AAbilityCharacter* AbilityCharacter) const
 		UInputTagSubsystem* InputTagSubsystem = UInputTagSubsystem::GetInputTagSubsystem(WorldContext);
 		UInputAction* AbilityInputAction = InputTagSubsystem->GetInputAction(Tag);
 		
-		EIC->BindActionValueLambda(AbilityInputAction, ETriggerEvent::Started, [ASC, Tag](const FInputActionValue& Value)
+		FEnhancedInputActionEventBinding& Binding = EIC->BindActionValueLambda(AbilityInputAction, ETriggerEvent::Started, [ASC, Tag](const FInputActionValue& Value)
 		{
 			if (ASC)
 			{
@@ -46,6 +47,53 @@ void UAbilitySet::GiveAbilities(AAbilityCharacter* AbilityCharacter) const
 			}
 		});
 		
+		CharacterAbilitiesHandle.InputBindings.Add(Binding.GetHandle());
+		
+		CharacterAbilitiesHandle.AbilitySpecs.Add(AbilitySpec);
+		
 		ASC->GiveAbility(AbilitySpec);
+	}
+	
+	AbilityCharacter->OnDeath.AddDynamic(this, &UAbilitySet::OnCharacterDestroyed);
+}
+
+void UAbilitySet::RemoveAbilities(AAbilityCharacter* AbilityCharacter)
+{
+	RemoveBindings(AbilityCharacter);
+	
+	UAbilitySystemComponent* ASC = AbilityCharacter->GetAbilitySystemComponent();
+	
+	if (ASC == nullptr)
+	{
+		return;
+	}
+	
+	FCharacterGivenAbilitiesHandle* CharacterAbilities = GivenAbilities.Find(AbilityCharacter);
+	
+	
+	for (auto& AbilitySpec : CharacterAbilities->AbilitySpecs)
+	{
+		ASC->ClearAbility(AbilitySpec.Handle);
+	}
+	
+	GivenAbilities.Remove(AbilityCharacter);
+}
+
+void UAbilitySet::OnCharacterDestroyed(AAbilityCharacter* DestroyedCharacter)
+{
+	RemoveBindings(DestroyedCharacter);
+	DestroyedCharacter->OnDeath.RemoveDynamic(this, &UAbilitySet::OnCharacterDestroyed);
+}
+
+void UAbilitySet::RemoveBindings(AAbilityCharacter* DestroyedCharacter)
+{
+	UInputComponent* InputComponent = DestroyedCharacter->InputComponent;
+	UEnhancedInputComponent* EIC = CastChecked<UEnhancedInputComponent>(InputComponent);
+	
+	FCharacterGivenAbilitiesHandle* ActorAbilitiesHandle = GivenAbilities.Find(DestroyedCharacter);
+	
+	for (int32 Binding : ActorAbilitiesHandle->InputBindings)
+	{
+		EIC->RemoveBindingByHandle(Binding);
 	}
 }

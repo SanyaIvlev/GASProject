@@ -12,7 +12,12 @@ void AAbilityCharacter::BeginPlay()
 	check(AbilitySystemComponent);
 	
 	AbilitySystemComponent->RegisterGenericGameplayTagEvent().AddUObject(this, &AAbilityCharacter::OnGameplayTagUpdated);
-	
+}
+
+void AAbilityCharacter::SetupPlayerInputComponent(UInputComponent* PlayerInputComponent)
+{
+	Super::SetupPlayerInputComponent(PlayerInputComponent);
+		
 	if (StartingAbilitySet != nullptr)
 	{
 		StartingAbilitySet->GiveAbilities(this);
