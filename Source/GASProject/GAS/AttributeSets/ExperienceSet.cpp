@@ -33,11 +33,17 @@ void UExperienceSet::PostGameplayEffectExecute(const struct FGameplayEffectModCa
 	if (Data.EvaluatedData.Attribute == GetExperienceAttribute())
 	{
 		float NewExperience = GetExperience();
+		float NeededExperienceAmount = GetNeededExperience();
 		
-		if (NewExperience >= GetNeededExperience())
+		if (NewExperience >= NeededExperienceAmount)
 		{
-			SetLevel(GetLevel() + 1);
-			SetExperience(GetNeededExperience() - NewExperience);
+			int32 NewExperienceInt = static_cast<int32>(NewExperience);
+			int32 NeededExperienceInt = static_cast<int32>(NeededExperienceAmount);
+			float LevelsUpped = NewExperienceInt / NeededExperienceInt;
+			float ExtraExperience = NewExperienceInt % NeededExperienceInt;
+			
+			SetLevel(GetLevel() + LevelsUpped);
+			SetExperience(ExtraExperience);
 			
 			CalculateNeededExperience();
 		}
