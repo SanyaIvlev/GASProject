@@ -3,17 +3,17 @@
 
 #include "ManaSet.h"
 
+#include "GameplayEffectExtension.h"
+
 UManaSet::UManaSet() : Mana(100), MaxMana(100.0f) 
 {
 	MinMana = 0;
 }
 
-void UManaSet::PreAttributeChange(const FGameplayAttribute& Attribute, float& NewValue)
+void UManaSet::PostGameplayEffectExecute(const struct FGameplayEffectModCallbackData& Data)
 {
-	Super::PreAttributeChange(Attribute, NewValue);
-	
-	if (Attribute == GetManaAttribute())
+	if (Data.EvaluatedData.Attribute == GetManaAttribute())
 	{
-		NewValue = FMath::Clamp(NewValue, MinMana, GetMaxMana());
+		SetMana(FMath::Clamp(GetMana(), MinMana, GetMaxMana()));
 	}
 }
