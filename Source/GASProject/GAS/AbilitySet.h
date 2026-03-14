@@ -51,9 +51,6 @@ public:
 private:
 	TMap<AActor*, FCharacterGivenAbilitiesHandle> GivenAbilities;
 	
-	UPROPERTY()
-	TArray<FGameplayAbilitySpec> AbilitySpecs;
-	
 	UFUNCTION()
 	void OnCharacterDestroyed(AAbilityCharacter* DestroyedCharacter);
 	void RemoveBindings(AAbilityCharacter* DestroyedCharacter);
