@@ -7,9 +7,8 @@
 #include "AbilitySystemComponent.h"
 #include "ExperienceSet.generated.h"
 
-/**
- * 
- */
+DECLARE_DYNAMIC_MULTICAST_DELEGATE(FOnUpdatedAttributes);
+
 UCLASS()
 class GASPROJECT_API UExperienceSet : public UAttributeSet
 {
@@ -22,6 +21,9 @@ public:
 	GAMEPLAYATTRIBUTE_PROPERTY_GETTER(UExperienceSet, NeededExperience)
 	GAMEPLAYATTRIBUTE_VALUE_GETTER(NeededExperience) 
 	GAMEPLAYATTRIBUTE_VALUE_INITTER(NeededExperience)
+	
+	UPROPERTY(BlueprintAssignable)
+	FOnUpdatedAttributes OnAttributesUpdated;
 	
 	UPROPERTY(BlueprintReadOnly)
 	FGameplayAttributeData Level;
@@ -37,7 +39,7 @@ public:
 	void CalculateNeededExperience();
 	
 	virtual void PreAttributeChange(const FGameplayAttribute& Attribute, float& NewValue) override;
-	virtual void PostAttributeChange(const FGameplayAttribute& Attribute, float OldValue, float NewValue) override;
+	virtual void PostGameplayEffectExecute(const struct FGameplayEffectModCallbackData& Data) override;
 	
 protected:
 	GAMEPLAYATTRIBUTE_VALUE_SETTER(NeededExperience)

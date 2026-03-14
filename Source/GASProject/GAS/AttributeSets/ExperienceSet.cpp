@@ -3,6 +3,8 @@
 
 #include "ExperienceSet.h"
 
+#include "GameplayEffectExtension.h"
+
 UExperienceSet::UExperienceSet() : Level(0), Experience(0), NeededExperience(1.5f * 1 * 1 - 1.5f * 1 + 1)
 {
 	StartingLevel = 0;
@@ -24,22 +26,27 @@ void UExperienceSet::PreAttributeChange(const FGameplayAttribute& Attribute, flo
 	}
 }
 
-void UExperienceSet::PostAttributeChange(const FGameplayAttribute& Attribute, float OldValue, float NewValue)
+void UExperienceSet::PostGameplayEffectExecute(const struct FGameplayEffectModCallbackData& Data)
 {
-	Super::PostAttributeChange(Attribute, OldValue, NewValue);
+	Super::PostGameplayEffectExecute(Data);
 	
-	if (Attribute == GetExperienceAttribute())
+	if (Data.EvaluatedData.Attribute == GetExperienceAttribute())
 	{
-		if (NewValue >= GetNeededExperience())
+		float NewExperience = GetExperience();
+		
+		if (NewExperience >= GetNeededExperience())
 		{
 			SetLevel(GetLevel() + 1);
-			SetExperience(GetNeededExperience() - NewValue);
+			SetExperience(GetNeededExperience() - NewExperience);
 			
 			CalculateNeededExperience();
 		}
 	}
-	else if (Attribute == GetLevelAttribute())
+	else if (Data.EvaluatedData.Attribute == GetLevelAttribute())
 	{
 		CalculateNeededExperience();
 	}
+	
+	OnAttributesUpdated.Broadcast();
 }
+
