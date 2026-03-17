@@ -76,3 +76,4 @@ DerivedDataCache/*
 .idea/**
 *.sln.DotSettings.user
 Plugins/Developer/RiderLink/**
+.junie/**

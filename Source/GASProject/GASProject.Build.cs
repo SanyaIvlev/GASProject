@@ -8,7 +8,7 @@ public class GASProject : ModuleRules
 	{
 		PCHUsage = PCHUsageMode.UseExplicitOrSharedPCHs;
 	
-		PublicDependencyModuleNames.AddRange(new string[] { "Core", "CoreUObject", "Engine", "InputCore", "GameplayTags", "DeveloperSettings", "EnhancedInput"});
+		PublicDependencyModuleNames.AddRange(new string[] { "Core", "CoreUObject", "Engine", "InputCore", "GameplayTags", "DeveloperSettings", "EnhancedInput", "GameplayAbilities"});
 
 		PrivateDependencyModuleNames.AddRange(new string[] {  });
 

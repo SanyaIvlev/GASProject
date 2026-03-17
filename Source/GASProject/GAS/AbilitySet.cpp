@@ -13,7 +13,7 @@ void UAbilitySet::GiveAbilities(AAbilityCharacter* AbilityCharacter)
 	
 	if (ASC == nullptr)
 	{
-		return;
+		return; 
 	}
 	
 	FCharacterGivenAbilitiesHandle& CharacterAbilitiesHandle = GivenAbilities.Add(AbilityCharacter);
@@ -21,7 +21,7 @@ void UAbilitySet::GiveAbilities(AAbilityCharacter* AbilityCharacter)
 	for (auto& AbilityInfo : Abilities)
 	{
 		UGameplayAbility* AbilityToGrant = AbilityInfo.Ability->GetDefaultObject<UGameplayAbility>();
-		
+		 
 		FGameplayAbilitySpec AbilitySpec(AbilityToGrant);
 		AbilitySpec.SourceObject = AbilityCharacter;
 		FGameplayTag Tag = AbilityInfo.InputTag;

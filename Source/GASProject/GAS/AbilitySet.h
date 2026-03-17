@@ -49,7 +49,7 @@ public:
 	void RemoveAbilities(AAbilityCharacter* AbilityCharacter);
 	
 private:
-	TMap<AActor*, FCharacterGivenAbilitiesHandle> GivenAbilities;
+	TMap<AActor*, FCharacterGivenAbilitiesHandle> GivenAbilities; 
 	
 	UFUNCTION()
 	void OnCharacterDestroyed(AAbilityCharacter* DestroyedCharacter);
