@@ -90,5 +90,5 @@ void UInventoryComponent::ActivateItem(const FGameplayTag Tag, bool bIsActivated
 		return;
 	}
 	
-	Item->GetRootComponent()->SetVisibility(bIsActivated);
+	Item->SetActorHiddenInGame(!bIsActivated);
 }
