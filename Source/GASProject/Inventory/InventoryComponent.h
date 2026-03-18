@@ -3,7 +3,7 @@
 #include "CoreMinimal.h"
 #include "Components/ActorComponent.h"
 #include "GameplayTagContainer.h"
-#include "InventoryItemData.h"
+#include "ItemBase.h"
 #include "InventoryComponent.generated.h"
 
 USTRUCT(BlueprintType)
@@ -13,11 +13,11 @@ struct FInventorySlot
 
 public:
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Inventory")
-	UInventoryItemData* ItemData;
+	AItemBase* Item;
 
-	FInventorySlot() : ItemData(nullptr) {}
+	FInventorySlot() : Item(nullptr) {}
 
-	bool IsEmpty() const { return ItemData == nullptr; }
+	bool IsEmpty() const { return !IsValid(Item); }
 };
 
 DECLARE_DYNAMIC_MULTICAST_DELEGATE(FOnInventoryUpdated);
@@ -44,10 +44,16 @@ public:
 	FOnInventoryUpdated OnInventoryUpdated;
 
 	UFUNCTION(BlueprintCallable, Category = "Inventory")
-	bool AddItem(UInventoryItemData* NewItem);
+	bool AddItem(AItemBase* NewItem);
 
 	UFUNCTION(BlueprintCallable, Category = "Inventory")
 	bool RemoveItemByTag(FGameplayTag ItemTag);
+	
+	UFUNCTION(BlueprintCallable, Category = "Inventory")
+	UInventoryItemData* GetItemData(int32 Index);
+	
+	UFUNCTION(BlueprintCallable, Category = "Inventory")
+	void ActivateItem(const FGameplayTag Tag, bool bIsActivated);
 
 	UFUNCTION(BlueprintPure, Category = "Inventory")
 	const TArray<FInventorySlot>& GetSlots() const { return Slots; }

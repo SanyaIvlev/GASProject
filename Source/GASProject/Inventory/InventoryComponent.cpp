@@ -1,5 +1,7 @@
 ﻿#include "InventoryComponent.h"
 
+#include "VisualizeTexture.h"
+
 UInventoryComponent::UInventoryComponent()
 {
 	PrimaryComponentTick.bCanEverTick = false;
@@ -13,7 +15,7 @@ void UInventoryComponent::BeginPlay()
 	Slots.SetNum(MaxSlots);
 }
 
-bool UInventoryComponent::AddItem(UInventoryItemData* NewItem)
+bool UInventoryComponent::AddItem(AItemBase* NewItem)
 {
 	if (!NewItem) return false;
 
@@ -21,7 +23,7 @@ bool UInventoryComponent::AddItem(UInventoryItemData* NewItem)
 	{
 		if (Slots[i].IsEmpty())
 		{
-			Slots[i].ItemData = NewItem;
+			Slots[i].Item = NewItem;
 			OnInventoryUpdated.Broadcast();
 			return true;
 		}
@@ -37,9 +39,9 @@ bool UInventoryComponent::RemoveItemByTag(FGameplayTag ItemTag)
 	bool bRemoved = false;
 	for (int32 i = 0; i < Slots.Num(); ++i)
 	{
-		if (!Slots[i].IsEmpty() && Slots[i].ItemData->ItemTag.MatchesTag(ItemTag))
+		if (!Slots[i].IsEmpty() && Slots[i].Item->GetItemTag().MatchesTag(ItemTag))
 		{
-			Slots[i].ItemData = nullptr;
+			Slots[i].Item = nullptr;
 			bRemoved = true;
 		}
 	}
@@ -50,4 +52,43 @@ bool UInventoryComponent::RemoveItemByTag(FGameplayTag ItemTag)
 	}
 
 	return bRemoved;
+}
+
+UInventoryItemData* UInventoryComponent::GetItemData(int32 Index)
+{
+	FInventorySlot Slot = Slots[Index];
+	
+	if (Slot.IsEmpty())
+	{
+		return nullptr;
+	}
+	
+	return Slot.Item->ItemData;
+}
+
+void UInventoryComponent::ActivateItem(const FGameplayTag Tag, bool bIsActivated)
+{
+	AItemBase* Item = nullptr;
+	
+	for (auto& Slot : Slots)
+	{
+		AItemBase* SlotItem = Slot.Item;
+		
+		if (Slot.IsEmpty())
+		{
+			continue;
+		}
+		
+		if (SlotItem->GetItemTag().MatchesTagExact(Tag))
+		{
+			Item = SlotItem;
+		}
+	}
+	
+	if (!IsValid(Item))
+	{
+		return;
+	}
+	
+	Item->GetRootComponent()->SetVisibility(bIsActivated);
 }
