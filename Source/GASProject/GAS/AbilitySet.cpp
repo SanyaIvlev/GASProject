@@ -70,6 +70,10 @@ void UAbilitySet::RemoveAbilities(AAbilityCharacter* AbilityCharacter)
 	
 	FCharacterGivenAbilitiesHandle* CharacterAbilities = GivenAbilities.Find(AbilityCharacter);
 	
+	if (CharacterAbilities == nullptr)
+	{
+		return;
+	}
 	
 	for (auto& AbilitySpec : CharacterAbilities->AbilitySpecs)
 	{
@@ -91,6 +95,11 @@ void UAbilitySet::RemoveBindings(AAbilityCharacter* DestroyedCharacter)
 	UEnhancedInputComponent* EIC = CastChecked<UEnhancedInputComponent>(InputComponent);
 	
 	FCharacterGivenAbilitiesHandle* ActorAbilitiesHandle = GivenAbilities.Find(DestroyedCharacter);
+	
+	if (ActorAbilitiesHandle == nullptr)
+	{
+		return;
+	}
 	
 	for (int32 Binding : ActorAbilitiesHandle->InputBindings)
 	{

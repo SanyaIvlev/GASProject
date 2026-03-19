@@ -1,5 +1,6 @@
 ﻿#include "ItemBase.h"
 #include "GameFramework/Character.h"
+#include "GASProject/GAS/AbilitySet.h"
 
 AItemBase::AItemBase()
 {
@@ -30,17 +31,29 @@ void AItemBase::ProcessActivation(bool bIsActivated)
 		return;
 	}
 	
+	UAbilitySet* Abilities = ItemData->AbilitySet;
+	
 	if (bIsActivated)
 	{
 		OwnerAnimInstance->LinkAnimClassLayers(ActivationAnimInstance);
+			
+		if (IsValid(Abilities))
+		{
+			Abilities->GiveAbilities(ItemOwner);
+		}
 	}
 	else
 	{
 		OwnerAnimInstance->UnlinkAnimClassLayers(ActivationAnimInstance);
+		
+		if (IsValid(Abilities))
+		{
+			Abilities->RemoveAbilities(ItemOwner);
+		}
 	}
 }
 
-void AItemBase::SetItemOwner(ACharacter* NewOwner)
+void AItemBase::SetItemOwner(AAbilityCharacter* NewOwner)
 {
 	ItemOwner = NewOwner;
 }

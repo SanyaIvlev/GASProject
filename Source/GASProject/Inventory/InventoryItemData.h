@@ -5,9 +5,8 @@
 #include "GameplayTagContainer.h"
 #include "InventoryItemData.generated.h"
 
-/**
- * Primary Data Asset for inventory items.
- */
+class UAbilitySet;
+
 UCLASS(BlueprintType)
 class GASPROJECT_API UInventoryItemData : public UPrimaryDataAsset
 {
@@ -18,11 +17,14 @@ public:
 	FGameplayTag ItemTag;
 	
 	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = "Inventory")
-	TSubclassOf<UAnimInstance> ActivationAnimInstance;
-
-	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = "Inventory")
 	FText ItemName;
 
+	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = "Inventory")
+	TSubclassOf<UAnimInstance> ActivationAnimInstance;
+	
+	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = "Inventory")
+	UAbilitySet* AbilitySet;
+	
 	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = "Inventory")
 	UTexture2D* Icon;
 

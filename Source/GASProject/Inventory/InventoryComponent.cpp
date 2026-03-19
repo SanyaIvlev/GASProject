@@ -70,9 +70,12 @@ UInventoryItemData* UInventoryComponent::GetItemData(int32 Index)
 void UInventoryComponent::ActivateItem(const FGameplayTag Tag, bool bIsActivated)
 {
 	AItemBase* Item = nullptr;
+	int32 SlotIndex = 0;
 	
-	for (auto& Slot : Slots)
+	for (int i = 0; i < Slots.Num(); ++i)
 	{
+		auto& Slot = Slots[i];
+		
 		AItemBase* SlotItem = Slot.Item;
 		
 		if (Slot.IsEmpty())
@@ -83,6 +86,8 @@ void UInventoryComponent::ActivateItem(const FGameplayTag Tag, bool bIsActivated
 		if (SlotItem->GetItemTag().MatchesTagExact(Tag))
 		{
 			Item = SlotItem;
+			SlotIndex = i;
+			break;
 		}
 	}
 	
@@ -91,5 +96,15 @@ void UInventoryComponent::ActivateItem(const FGameplayTag Tag, bool bIsActivated
 		return;
 	}
 	
+	if (bIsActivated)
+	{
+		ActivatedIndex = SlotIndex;
+	}
+	
 	Item->ProcessActivation(bIsActivated);
+}
+
+AItemBase* UInventoryComponent::GetActivatedItem()
+{
+	return Slots[ActivatedIndex].Item;
 }

@@ -3,6 +3,7 @@
 #include "CoreMinimal.h"
 #include "GameFramework/Actor.h"
 #include "InventoryItemData.h"
+#include "GASProject/GAS/AbilityCharacter.h"
 #include "ItemBase.generated.h"
 
 /**
@@ -20,13 +21,13 @@ public:
 	UInventoryItemData* ItemData;
 	
 	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = "Inventory")
-	ACharacter* ItemOwner;
+	AAbilityCharacter* ItemOwner;
 
     UFUNCTION(BlueprintPure, Category = "Inventory")
     FGameplayTag GetItemTag() const { return ItemData ? ItemData->ItemTag : FGameplayTag::EmptyTag; }
 	
 	UFUNCTION(BlueprintCallable, Category = "Inventory")
-	void SetItemOwner(ACharacter* NewOwner);
+	void SetItemOwner(AAbilityCharacter* NewOwner);
 	
 	void ProcessActivation(bool bIsActivated);
 };

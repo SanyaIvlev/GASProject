@@ -58,7 +58,13 @@ public:
 	
 	UFUNCTION(BlueprintCallable, Category = "Inventory")
 	void ActivateItem(const FGameplayTag Tag, bool bIsActivated);
+	
+	UFUNCTION(BlueprintPure, Category = "Inventory")
+	AItemBase* GetActivatedItem();
 
 	UFUNCTION(BlueprintPure, Category = "Inventory")
 	const TArray<FInventorySlot>& GetSlots() const { return Slots; }
+	
+private:
+	int32 ActivatedIndex;
 };
