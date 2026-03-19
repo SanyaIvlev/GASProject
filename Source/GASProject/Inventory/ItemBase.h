@@ -18,7 +18,15 @@ public:
 
 	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = "Inventory")
 	UInventoryItemData* ItemData;
+	
+	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = "Inventory")
+	ACharacter* ItemOwner;
 
     UFUNCTION(BlueprintPure, Category = "Inventory")
     FGameplayTag GetItemTag() const { return ItemData ? ItemData->ItemTag : FGameplayTag::EmptyTag; }
+	
+	UFUNCTION(BlueprintCallable, Category = "Inventory")
+	void SetItemOwner(ACharacter* NewOwner);
+	
+	void ProcessActivation(bool bIsActivated);
 };

@@ -24,6 +24,7 @@ bool UInventoryComponent::AddItem(AItemBase* NewItem)
 		if (Slots[i].IsEmpty())
 		{
 			Slots[i].Item = NewItem;
+			NewItem->ProcessActivation(false); 
 			OnInventoryUpdated.Broadcast();
 			return true;
 		}
@@ -90,5 +91,5 @@ void UInventoryComponent::ActivateItem(const FGameplayTag Tag, bool bIsActivated
 		return;
 	}
 	
-	Item->SetActorHiddenInGame(!bIsActivated);
+	Item->ProcessActivation(bIsActivated);
 }

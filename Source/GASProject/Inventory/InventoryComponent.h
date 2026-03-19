@@ -21,6 +21,7 @@ public:
 };
 
 DECLARE_DYNAMIC_MULTICAST_DELEGATE(FOnInventoryUpdated);
+DECLARE_DYNAMIC_MULTICAST_DELEGATE_OneParam(FOnItemActivated, bool, bIsActivated);
 
 UCLASS(ClassGroup=(Custom), meta=(BlueprintSpawnableComponent))
 class GASPROJECT_API UInventoryComponent : public UActorComponent
@@ -42,6 +43,9 @@ public:
 
 	UPROPERTY(BlueprintAssignable, Category = "Inventory")
 	FOnInventoryUpdated OnInventoryUpdated;
+	
+	UPROPERTY(BlueprintAssignable, Category = "Inventory")
+	FOnItemActivated OnItemActivated;
 
 	UFUNCTION(BlueprintCallable, Category = "Inventory")
 	bool AddItem(AItemBase* NewItem);

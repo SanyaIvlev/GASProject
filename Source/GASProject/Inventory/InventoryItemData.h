@@ -16,6 +16,9 @@ class GASPROJECT_API UInventoryItemData : public UPrimaryDataAsset
 public:
 	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = "Inventory")
 	FGameplayTag ItemTag;
+	
+	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = "Inventory")
+	TSubclassOf<UAnimInstance> ActivationAnimInstance;
 
 	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = "Inventory")
 	FText ItemName;
