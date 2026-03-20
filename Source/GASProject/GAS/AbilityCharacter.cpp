@@ -52,7 +52,7 @@ float AAbilityCharacter::GetCooldownRemaining(FGameplayTag CooldownTag) const
 }
 
 void AAbilityCharacter::InitializeAttributeSetsFromData(UCharacterAttributesData* AttributeSetData)
-{екрпппппппп
+{
 	check(AbilitySystemComponent);
 	
 	for (auto& AttributeSet : AttributeSetData->AttributeSets)
