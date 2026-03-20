@@ -26,6 +26,13 @@ void UAbilitySet::GiveAbilities(AAbilityCharacter* AbilityCharacter)
 		AbilitySpec.SourceObject = AbilityCharacter;
 		FGameplayTag Tag = AbilityInfo.InputTag;
 		
+		if (!Tag.IsValid())
+		{
+			ASC->GiveAbility(AbilitySpec);
+			return;
+		}
+		
+		
 		AbilitySpec.GetDynamicSpecSourceTags().AddTag(Tag);
 		
 		UInputComponent* InputComponent = AbilityCharacter->InputComponent;
