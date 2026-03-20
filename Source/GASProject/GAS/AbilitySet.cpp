@@ -16,7 +16,7 @@ void UAbilitySet::GiveAbilities(AAbilityCharacter* AbilityCharacter)
 		return; 
 	}
 	
-	FCharacterGivenAbilitiesHandle& CharacterAbilitiesHandle = GivenAbilities.Add(AbilityCharacter);
+	FGivenAbilitiesHandle& CharacterAbilitiesHandle = GivenHandles.Add(AbilityCharacter);
 	
 	for (auto& AbilityInfo : Abilities)
 	{
@@ -29,9 +29,8 @@ void UAbilitySet::GiveAbilities(AAbilityCharacter* AbilityCharacter)
 		if (!Tag.IsValid())
 		{
 			ASC->GiveAbility(AbilitySpec);
-			return;
+			continue;
 		}
-		
 		
 		AbilitySpec.GetDynamicSpecSourceTags().AddTag(Tag);
 		
@@ -60,6 +59,14 @@ void UAbilitySet::GiveAbilities(AAbilityCharacter* AbilityCharacter)
 		
 		ASC->GiveAbility(AbilitySpec);
 	}
+
+	for (auto Effect : Effects)
+	{
+		UGameplayEffect* EffectDefaultObject = Effect->GetDefaultObject<UGameplayEffect>();
+		
+		FActiveGameplayEffectHandle EffectHandle = ASC->ApplyGameplayEffectToSelf(EffectDefaultObject, 1, FGameplayEffectContextHandle());
+		CharacterAbilitiesHandle.ActiveGameplayEffectHandles.Add(EffectHandle);
+	}
 	
 	AbilityCharacter->OnDeath.AddDynamic(this, &UAbilitySet::OnCharacterDestroyed);
 }
@@ -75,7 +82,7 @@ void UAbilitySet::RemoveAbilities(AAbilityCharacter* AbilityCharacter)
 		return;
 	}
 	
-	FCharacterGivenAbilitiesHandle* CharacterAbilities = GivenAbilities.Find(AbilityCharacter);
+	FGivenAbilitiesHandle* CharacterAbilities = GivenHandles.Find(AbilityCharacter);
 	
 	if (CharacterAbilities == nullptr)
 	{
@@ -87,7 +94,12 @@ void UAbilitySet::RemoveAbilities(AAbilityCharacter* AbilityCharacter)
 		ASC->ClearAbility(AbilitySpec.Handle);
 	}
 	
-	GivenAbilities.Remove(AbilityCharacter);
+	for (auto ActiveEffectHandle : CharacterAbilities->ActiveGameplayEffectHandles)
+	{
+		ASC->RemoveActiveGameplayEffect(ActiveEffectHandle);
+	}
+	
+	GivenHandles.Remove(AbilityCharacter);
 }
 
 void UAbilitySet::OnCharacterDestroyed(AAbilityCharacter* DestroyedCharacter)
@@ -101,7 +113,7 @@ void UAbilitySet::RemoveBindings(AAbilityCharacter* DestroyedCharacter)
 	UInputComponent* InputComponent = DestroyedCharacter->InputComponent;
 	UEnhancedInputComponent* EIC = CastChecked<UEnhancedInputComponent>(InputComponent);
 	
-	FCharacterGivenAbilitiesHandle* ActorAbilitiesHandle = GivenAbilities.Find(DestroyedCharacter);
+	FGivenAbilitiesHandle* ActorAbilitiesHandle = GivenHandles.Find(DestroyedCharacter);
 	
 	if (ActorAbilitiesHandle == nullptr)
 	{

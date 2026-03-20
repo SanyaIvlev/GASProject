@@ -4,6 +4,7 @@
 
 #include "CoreMinimal.h"
 #include "GameplayAbilitySpec.h"
+#include "GameplayEffect.h"
 #include "Engine/DataAsset.h"
 #include "AbilitySet.generated.h"
 
@@ -25,12 +26,13 @@ public:
 };
 
 USTRUCT()
-struct FCharacterGivenAbilitiesHandle
+struct FGivenAbilitiesHandle
 {
 	GENERATED_BODY()
 	
 public:
 	TArray<FGameplayAbilitySpec> AbilitySpecs;
+	TArray<FActiveGameplayEffectHandle> ActiveGameplayEffectHandles;
 	
 	TArray<int32> InputBindings;
 };
@@ -45,11 +47,14 @@ public:
 	UPROPERTY(EditDefaultsOnly)
 	TArray<FAbilityInfo> Abilities;
 	
+	UPROPERTY(EditDefaultsOnly)
+	TArray<TSubclassOf<UGameplayEffect>> Effects;
+	
 	void GiveAbilities(AAbilityCharacter* AbilityCharacter);
 	void RemoveAbilities(AAbilityCharacter* AbilityCharacter);
 	
 private:
-	TMap<AActor*, FCharacterGivenAbilitiesHandle> GivenAbilities; 
+	TMap<AActor*, FGivenAbilitiesHandle> GivenHandles;
 	
 	UFUNCTION()
 	void OnCharacterDestroyed(AAbilityCharacter* DestroyedCharacter);
