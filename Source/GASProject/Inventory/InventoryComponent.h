@@ -65,6 +65,8 @@ public:
 	UFUNCTION(BlueprintPure, Category = "Inventory")
 	const TArray<FInventorySlot>& GetSlots() const { return Slots; }
 	
+	virtual void OnComponentDestroyed(bool bDestroyingHierarchy) override;
+	
 private:
 	int32 ActivatedIndex;
 };

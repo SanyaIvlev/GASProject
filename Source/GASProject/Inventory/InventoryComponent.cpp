@@ -108,3 +108,18 @@ AItemBase* UInventoryComponent::GetActivatedItem()
 {
 	return Slots[ActivatedIndex].Item;
 }
+
+void UInventoryComponent::OnComponentDestroyed(bool bDestroyingHierarchy)
+{
+	Super::OnComponentDestroyed(bDestroyingHierarchy);
+
+	for (auto& Slot : Slots)
+	{
+		if (IsValid(Slot.Item))
+		{
+			Slot.Item->Destroy();
+		}
+	}
+	
+	Slots.Empty();
+}
