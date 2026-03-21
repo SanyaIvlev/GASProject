@@ -9,6 +9,8 @@
 /**
  * Base class for all inventory items as Actors.
  */
+DECLARE_DYNAMIC_MULTICAST_DELEGATE_OneParam(FOnOwnerUpdated, AAbilityCharacter*, Owner);
+
 UCLASS()
 class GASPROJECT_API AItemBase : public AActor
 {
@@ -22,6 +24,9 @@ public:
 	
 	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = "Inventory")
 	AAbilityCharacter* ItemOwner;
+	
+	UPROPERTY(BlueprintAssignable)
+	FOnOwnerUpdated OnOwnerUpdated;
 
     UFUNCTION(BlueprintPure, Category = "Inventory")
     FGameplayTag GetItemTag() const { return ItemData ? ItemData->ItemTag : FGameplayTag::EmptyTag; }

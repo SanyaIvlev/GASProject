@@ -56,4 +56,5 @@ void AItemBase::ProcessActivation(bool bIsActivated)
 void AItemBase::SetItemOwner(AAbilityCharacter* NewOwner)
 {
 	ItemOwner = NewOwner;
+	OnOwnerUpdated.Broadcast(NewOwner);
 }
