@@ -14,6 +14,13 @@ void AAbilityCharacter::BeginPlay()
 	AbilitySystemComponent->RegisterGenericGameplayTagEvent().AddUObject(this, &AAbilityCharacter::OnGameplayTagUpdated);
 }
 
+void AAbilityCharacter::PossessedBy(AController* NewController)
+{
+	Super::PossessedBy(NewController);
+	
+	AbilitySystemComponent->RefreshAbilityActorInfo();
+}
+
 void AAbilityCharacter::SetupPlayerInputComponent(UInputComponent* PlayerInputComponent)
 {
 	Super::SetupPlayerInputComponent(PlayerInputComponent);
