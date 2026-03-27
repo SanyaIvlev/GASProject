@@ -46,6 +46,9 @@ public:
 	
 	UPROPERTY(BlueprintAssignable, Category = "Inventory")
 	FOnItemActivated OnItemActivated;
+	
+	UFUNCTION(BlueprintCallable, Category = "Inventory")
+	bool HasEmptySlots();
 
 	UFUNCTION(BlueprintCallable, Category = "Inventory")
 	bool AddItem(AItemBase* NewItem);

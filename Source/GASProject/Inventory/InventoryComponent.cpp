@@ -15,9 +15,25 @@ void UInventoryComponent::BeginPlay()
 	Slots.SetNum(MaxSlots);
 }
 
+bool UInventoryComponent::HasEmptySlots()
+{
+	for (auto& Slot : Slots)
+	{
+		if (Slot.IsEmpty())
+		{
+			return true;
+		}
+	}
+	
+	return false;
+}
+
 bool UInventoryComponent::AddItem(AItemBase* NewItem)
 {
-	if (!NewItem) return false;
+	if (!NewItem)
+	{
+		return false;
+	}
 
 	for (int32 i = 0; i < Slots.Num(); ++i)
 	{

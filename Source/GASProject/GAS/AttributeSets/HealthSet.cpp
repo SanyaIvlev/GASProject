@@ -33,13 +33,7 @@ void UHealthSet::PostGameplayEffectExecute(const FGameplayEffectModCallbackData&
 	{
 		float NewHealth = FMath::Clamp(GetHealth(), MinHealth, GetMaxHealth());
 		SetHealth(NewHealth);
-		
-		FString Message = FString::Printf(TEXT("Character %s got %f HP and is dead?: %d"), 
-		*GetOwningActor()->GetName(), 
-		NewHealth, 
-		bIsOutOfHealth);
 
-		GEngine->AddOnScreenDebugMessage(-1, 5.0f, FColor::Red, Message);
 		if (NewHealth <= MinHealth && !bIsOutOfHealth)
 		{
 			OnOutOfHealth.Broadcast();
