@@ -118,6 +118,7 @@ void UInventoryComponent::ActivateItem(const FGameplayTag Tag, bool bIsActivated
 	}
 	
 	Item->ProcessActivation(bIsActivated);
+	OnItemActivated.Broadcast(bIsActivated);
 }
 
 AItemBase* UInventoryComponent::GetActivatedItem()
